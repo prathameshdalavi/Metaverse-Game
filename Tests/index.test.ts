@@ -52,5 +52,22 @@ describe("Authentication", () => {
         })
         expect(response.status).toBe(403)
     })
-})
+    test("signin succeeds if the username and password are correct",async ()=>{
+        const userName=`prathamesh-${Math.random()}`
+        const password="123456";
+        await axios.post(BACKEND_URL+"/api/v1/signup",{
+            userName,
+            password
+        })
+        const response=await axios.post(BACKEND_URL+"/api/v1/signin",{
+            userName,
+            password
+        })
+        expect(response.status).toBe(200)
+        expect(response.body.token).toBeDefined()
+    })
+}) 
+
+
+
 
