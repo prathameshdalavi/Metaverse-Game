@@ -72,12 +72,12 @@ describe("User metadata endpoints", () => {
             "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
             "name": "Avatar 1"
         })
-        avatarId=avatarResponse.data.avatarId
+        avatarId = avatarResponse.data.avatarId
     })
     test("User cant update their metadata with wrong avatar ID", async () => {
         const response = await axios.patch(BACKEND_URL + "/api/v1/user/metadata", {
             avatarId: "123123123"
-        },{
+        }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -96,12 +96,12 @@ describe("User metadata endpoints", () => {
         })
         expect(response.status).toBe(403)
     })
-    
+
 })
 describe("User avatar Information", () => {
-    let avatarId;
-    let token ;
-    let userId;
+    let avatarId: any;
+    let token;
+    let userId: string;
     beforeAll(async () => {
         const userName = `prathamesh-${Math.random()}`;
         const password = "123456";
@@ -120,10 +120,22 @@ describe("User avatar Information", () => {
             "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
             "name": "Avatar 1"
         })
-        avatarId=avatarResponse.data.avatarId
+        avatarId = avatarResponse.data.avatarId
     })
-
-
+    test("Get back avatar information for a user", async () => {
+        const response = await axios.get(`${BACKEND_URL}/api/v1/user/metadata/bulk?ids={${userId}`).then((response) => { })
+        expect(response.data.avatar.length).toBe(1)
+        expect(response.data.avatar[0].userId).toBe(userId)
+    })
+    test("Available avatars lists the recently created avatar",async ()=>{
+        const response = await axios.post(`${BACKEND_URL}/api/v1/avatars`,{
+            
+        })
+        expect(response.data.avatars[0].length).not.toBe(0)
+        const currentAvatar=response.data.avatars[0].find((x: { id: any; })=>x.id===avatarId)
+        expect(currentAvatar).toBeDefined()
+    })
 })
+
 
 
